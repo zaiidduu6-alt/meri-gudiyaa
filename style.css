@@ -1,0 +1,122 @@
+/* Layout concept: one portrait stage. Every size is in rem where 1rem = 10px of the
+   720px-wide reference video, so the whole page scales with the screen width. */
+:root{
+  --page:#fbfae9;
+  --ink:#000;
+  --lock-screen:#e9fccf;
+  --purple:#9a67ff;
+  --purple-soft:#b897f7;
+  --card:#fe968a;
+  --card-ink:#4a2012;
+  --card-line:#4c2c18;
+  --love:#fe62b5;
+  --serif-ink:#45463a;
+  --sans:'Roboto','Helvetica Neue',Arial,sans-serif;
+  color-scheme:light;
+}
+html{font-size:calc(min(100vw,560px)/72);-webkit-text-size-adjust:100%;background:var(--page)}
+html.lock,html.lock body{overflow:hidden;height:100%}
+body{
+  margin:0;background:var(--page);color:var(--ink);
+  font:500 3.3rem/1.25 var(--sans);
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));
+  -webkit-tap-highlight-color:transparent;
+}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+:focus-visible{outline:.4rem solid #5b35c9;outline-offset:.4rem}
+
+/* ---------- screens 1-3 share a fixed full-viewport layer ---------- */
+.screen{
+  position:fixed;inset:0;overflow:hidden;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s,visibility 0s .35s;
+}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .35s}
+
+/* ---------- screen 1: lock screen ---------- */
+.phone{
+  position:absolute;left:50%;top:47.3rem;width:49.6rem;height:135rem;margin-left:-24.8rem;
+  box-sizing:border-box;border:.4rem solid var(--purple);border-bottom:0;
+  border-radius:10rem 10rem 0 0;background:var(--lock-screen);
+  animation:phone-in .65s cubic-bezier(.2,.85,.25,1) both;
+  transition:transform .4s ease-in,opacity .4s ease-in;
+}
+.phone.leave{transform:translateY(7rem) scale(.9);opacity:0}
+@keyframes phone-in{from{transform:translateY(43rem) scale(.8)}to{transform:none}}
+.pill{position:absolute;left:50%;top:1.9rem;width:14.6rem;height:2.6rem;margin-left:-7.3rem;border-radius:1.3rem;background:var(--purple)}
+.btn-side{position:absolute;width:.9rem;border-radius:.4rem;background:var(--purple)}
+.btn-side.l1{left:-1.3rem;top:21.1rem;height:8rem}
+.btn-side.l2{left:-1.3rem;top:31.9rem;height:5.2rem}
+.btn-side.r1{right:-1.3rem;top:26.6rem;height:10.5rem}
+.lock-icon{position:absolute;left:50%;top:13rem;width:2.2rem;height:2.6rem;margin-left:-1.1rem}
+.date{position:absolute;left:0;right:0;top:16.8rem;text-align:center;font:400 2.3rem/3rem var(--sans);white-space:nowrap}
+.clock{position:absolute;left:0;right:0;top:20.6rem;text-align:center;font:700 8.4rem/1 var(--sans);letter-spacing:-.01em;white-space:nowrap}
+.clock small{position:absolute;margin-left:.8rem;margin-top:1.1rem;font:500 2.2rem/1 var(--sans);letter-spacing:0}
+.notif{
+  position:absolute;left:2.6rem;top:36.3rem;width:43.6rem;height:10.4rem;box-sizing:border-box;
+  border:.3rem solid #a069ff;border-radius:5.2rem;background:#fbf5fe;text-align:left;
+  box-shadow:0 1.3rem 2.6rem rgba(70,90,40,.22);
+}
+.notif .avatar{position:absolute;left:2.4rem;top:2.2rem;width:5.5rem;height:5.5rem;border-radius:50%;object-fit:cover}
+.notif .who{position:absolute;left:10rem;top:1.9rem;font:700 2.4rem/3rem var(--sans);color:#000;white-space:nowrap}
+.notif .msg{position:absolute;left:10rem;top:4.9rem;font:500 2rem/3rem var(--sans);color:#46465a;white-space:nowrap}
+.notif .ago{position:absolute;right:2.6rem;top:1.9rem;font:500 2rem/3rem var(--sans);color:#2b5ed6}
+.cursor{position:absolute;left:38.4rem;top:44.9rem;width:7.5rem;height:7.5rem;pointer-events:none;transform-origin:1rem 1.1rem;animation:tap 1.4s ease-in-out infinite}
+.cursor .spark{animation:spark 1.4s ease-in-out infinite}
+@keyframes tap{0%,55%,100%{transform:none}70%{transform:translate(.5rem,.5rem) scale(.9)}}
+@keyframes spark{0%,55%,100%{opacity:.25}70%,85%{opacity:1}}
+
+/* ---------- screen 2: the bear ---------- */
+#s2 .group{position:absolute;inset:0;box-sizing:border-box;padding-top:17.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#s2 h2{margin:0;font:500 4rem/4.8rem var(--sans);text-align:center;white-space:nowrap}
+.bear-box{
+  margin-top:5.4rem;box-sizing:border-box;width:.9rem;height:.9rem;overflow:hidden;
+  border:.7rem solid var(--purple-soft);border-radius:50%;background:#f8faf6;
+}
+.bear-box img{display:block;width:100%;height:100%;object-fit:cover;opacity:0}
+.bear-box.show{animation:grow .55s cubic-bezier(.2,.9,.3,1) forwards}
+.bear-box.show img{animation:fade-in .3s .3s forwards}
+@keyframes grow{to{width:38.1rem;height:34.9rem;border-radius:2.2rem}}
+@keyframes fade-in{to{opacity:1}}
+#s2 p{margin:5.1rem 0 0;font:500 3.3rem/4.7rem var(--sans);text-align:center}
+#hearts{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:5}
+.heart{position:absolute;top:0;left:0;will-change:transform;fill:none;stroke:#a487f2;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+
+/* ---------- screen 3: the apology card ---------- */
+#s3{overflow-y:auto;overscroll-behavior:contain}
+#s3 .wrap{min-height:100%;box-sizing:border-box;padding:4rem 0 4rem;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#s3 .cats{display:block;width:26.6rem;height:24.6rem;margin-left:4.6rem;margin-bottom:-.4rem;position:relative;z-index:1}
+.card{
+  position:relative;z-index:2;box-sizing:border-box;width:46rem;padding:3.2rem 2.6rem 3rem;
+  background:var(--card);color:var(--card-ink);border:.3rem solid var(--card-line);border-radius:2.4rem;text-align:center;
+}
+#s3.active .card{animation:pop .45s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes pop{from{opacity:0;transform:translateY(2.4rem) scale(.94)}to{opacity:1;transform:none}}
+.card h3{margin:0 0 1.4rem;font:700 3.1rem/3.7rem var(--sans)}
+.card p{margin:0 0 1.2rem;font:500 2.45rem/3.5rem var(--sans)}
+.card .forgive{
+  display:inline-block;margin-top:1.4rem;min-width:29.6rem;height:7.2rem;padding:0 3.2rem;border-radius:3.6rem;
+  background:#fffdf5;color:#000;font:700 2.9rem/7.2rem var(--sans);white-space:nowrap;
+  box-shadow:0 1.4rem 2.2rem rgba(214,84,70,.38);transition:transform .15s;
+}
+.card .forgive:active{transform:scale(.95)}
+#s3{transition:opacity .35s,visibility 0s .35s,transform .8s ease-in-out}
+#s3.active{transition:opacity .35s,transform .8s ease-in-out}
+#s3.out{transform:translateY(-100%)}
+
+/* ---------- screen 4: the gift ---------- */
+#s4{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;text-align:center;padding-bottom:0}
+#s4.enter{animation:zoom-in .95s cubic-bezier(.2,.8,.2,1) both}
+@keyframes zoom-in{from{opacity:0;transform:translateY(22rem) scale(.55)}to{opacity:1;transform:none}}
+#s4 h2{margin:8rem 0 0;font:700 5rem/6rem 'Playfair Display',Georgia,serif;color:var(--serif-ink);white-space:nowrap}
+#s4 .sub{margin:1.5rem 0 0;font:italic 500 2.9rem/4.8rem var(--sans);color:#444;white-space:nowrap}
+#s4 .bouquet{display:block;width:31.5rem;height:auto;margin:1.6rem 0 0 -2rem}
+#s4 .balloon{display:block;width:25.9rem;height:auto;margin:10.4rem 0 0 2.3rem}
+#s4 .love{margin:7.1rem 0 0;font:700 4.9rem/6rem var(--sans);color:var(--love);white-space:nowrap}
+#s4 .peek{display:block;width:30rem;height:auto;margin:auto 0 0;padding-top:5rem}
+
+@media (prefers-reduced-motion:reduce){
+  .phone,.cursor,.cursor .spark,#s4.enter{animation:none}
+  #hearts{display:none}
+}
